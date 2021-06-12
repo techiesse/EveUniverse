@@ -1,0 +1,12 @@
+{
+    "Jita": {
+        "id": 30000142,
+        "name": "Jita",
+        "region": "The Forge"
+    },
+    "Perimeter": {
+        "id": 30000144,
+        "name": "Perimeter",
+        "region": "The Forge"
+    }
+}

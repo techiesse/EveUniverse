@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block title %}Matérias Primas{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6 offset-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">Material</th>
+                    <th class="text-center">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td class="">{{item.item.name}}</td>
+                    <td class="text-right">
+                        {% if item.price %}{{item.price|isk}}{% else %}{{item.notes}}{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form class="form-group" action="{% url 'input_materials_update' owner.id %}" method="post">{% csrf_token %}
+            <input type="submit" name="submit" value="Atualizar">
+        </form>
+    </div>
+    <div class="col-auto"></div>
+</div>
+{% endblock content %}

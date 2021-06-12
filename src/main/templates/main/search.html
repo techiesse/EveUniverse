@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block title %}Busca{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6 offset-3">
+        <form class="form-group" action="{% url 'item_search' %}" method="post">{% csrf_token %}
+            {{ form.itemName.label }}
+            {{ form.itemName }}
+            <!-- <label for="">Item</label> -->
+            <!-- <input type="text" name="submit" value="Atualizar"> -->
+            <input type="submit" name="submit" value="Atualizar">
+        </form>
+
+        <h2>Resultados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <!-- <th>Ação</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                {% for item in results %}
+                    <tr>
+                        <td>{{item.type_id}}</td>
+                        <td>{{item.name}}</td>
+                        <!-- <td> <a class="btn btn-primary" href="#">Add</a> </td> -->
+                    </tr>
+                {% endfor %}
+
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto"></div>
+</div>
+{% endblock content %}

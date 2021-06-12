@@ -1,0 +1,67 @@
+[
+    {
+        "id": "25595",
+        "name": "Alloyed Tritanium Bar",
+        "type": "salvage"
+    },
+    {
+        "id": "25605",
+        "name": "Armor Plates",
+        "type": "salvage"
+    },
+    {
+        "id": "25600",
+        "name": "Burned Logic Circuit",
+        "type": "salvage"
+    },
+    {
+        "id": "25599",
+        "name": "Charred Micro Circuit",
+        "type": "salvage"
+    },
+    {
+        "id": "25591",
+        "name": "Contaminated Lorentz Fluid",
+        "type": "salvage"
+    },
+    {
+        "id": "25590",
+        "name": "Contaminated Nanite Compound",
+        "type": "salvage"
+    },
+    {
+        "id": "25597",
+        "name": "Damaged Artificial Neural Network",
+        "type": "salvage"
+    },
+    {
+        "id": "25601",
+        "name": "Fried Interface Circuit",
+        "type": "salvage"
+    },
+    {
+        "id": "25588",
+        "name": "Scorched Telemetry Processor",
+        "type": "salvage"
+    },
+    {
+        "id": "25594",
+        "name": "Tangled Power Conduit",
+        "type": "salvage"
+    },
+    {
+        "id": "25602",
+        "name": "Thruster Console",
+        "type": "salvage"
+    },
+    {
+        "id": "25598",
+        "name": "Tripped Power Circuit",
+        "type": "salvage"
+    },
+    {
+        "id": "25606",
+        "name": "Ward Console",
+        "type": "salvage"
+    }
+]

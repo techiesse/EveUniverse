@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block pageTitle %}Eve Universe{% endblock pageTitle %}</title>
+
+        <link rel="stylesheet" href="/static/css/app.css">
+        <link rel="stylesheet" href="/static/node_modules/bootstrap/dist/css/bootstrap.css">
+        {% block cssFiles %}
+        {% endblock cssFiles %}
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                {% block header %}{% endblock header %}
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="container">
+            {% block contentContainer %}
+            <div class="row">
+                <div class="col">
+                    <h1 class="page-header">
+                        {% block title %}
+                        {% endblock title %}
+                    </h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    {% block content%}
+                    {% endblock content%}
+                </div>
+            </div>
+            {% endblock contentContainer %}
+        </div>
+
+        <!-- Footer -->
+        <div class="rodape">
+            <footer id="footer" class="footer">
+            {% block footer %}
+            {% endblock footer %}
+            </footer>
+        </div><!-- /.container do rodapé -->
+
+        {% block jsFiles %}
+        {% endblock jsFiles %}
+    </body>
+</html>

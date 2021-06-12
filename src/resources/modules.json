@@ -1,0 +1,127 @@
+[
+    {
+        "id": 12274,
+        "name": "Ballistic Control System I",
+        "type": "module"
+    },
+    {
+        "id": 23527,
+        "name": "Drone Link Augmentor I",
+        "type": "module"
+    },
+    {
+        "id": 9944,
+        "name": "Magnetic Field Stabilizer I",
+        "type": "module"
+    },
+    {
+        "id": 11563,
+        "name": "Micro Auxiliary Power Core I",
+        "type": "module"
+    },
+    {
+        "id": 33176,
+        "name": "Scan Acquisition Array I",
+        "type": "module"
+    },
+    {
+        "id": 33180,
+        "name": "Scan Rangefinding Array I",
+        "type": "module"
+    },
+    {
+        "id": 31790,
+        "name": "Medium Core Defense Field Extender I",
+        "type": "rig"
+    },
+    {
+        "id": 31802,
+        "name": "Medium Core Defense Field Purger I",
+        "type": "rig"
+    },
+    {
+        "id": 31358,
+        "name": "Small Ancillary Current Router I",
+        "type": "rig"
+    },
+    {
+        "id": 31045,
+        "name": "Small Auxiliary Nano Pump I",
+        "type": "rig"
+    },
+    {
+        "id": 31105,
+        "name": "Small Auxiliary Thrusters I",
+        "type": "rig"
+    },
+    {
+        "id": 31586,
+        "name": "Small Bay Loading Accelerator I",
+        "type": "rig"
+    },
+    {
+        "id": 31788,
+        "name": "Small Core Defense Field Extender I",
+        "type": "rig"
+    },
+    {
+        "id": 31800,
+        "name": "Small Core Defense Field Purger I",
+        "type": "rig"
+    },
+    {
+        "id": 31201,
+        "name": "Small Emission Scope Sharpener I",
+        "type": "rig"
+    },
+    {
+        "id": 31526,
+        "name": "Small Hybrid Burst Aerator I",
+        "type": "rig"
+    },
+    {
+        "id": 31538,
+        "name": "Small Hybrid Collision Accelerator I",
+        "type": "rig"
+    },
+    {
+        "id": 31562,
+        "name": "Small Hybrid Locus Coordinator I",
+        "type": "rig"
+    },
+    {
+        "id": 31598,
+        "name": "Small Hydraulic Bay Thrusters I",
+        "type": "rig"
+    },
+    {
+        "id": 31159,
+        "name": "Small Hyperspatial Velocity Optimizer I",
+        "type": "rig"
+    },
+    {
+        "id": 31274,
+        "name": "Small Ionic Field Projector I",
+        "type": "rig"
+    },
+    {
+        "id": 31153,
+        "name": "Small Low Friction Nozzle Joints I",
+        "type": "rig"
+    },
+    {
+        "id": 31238,
+        "name": "Small Memetic Algorithm Bank I",
+        "type": "rig"
+    },
+    {
+        "id": 33890,
+        "name": "Small Transverse Bulkhead I",
+        "type": "rig"
+    },
+    {
+        "id": 31620,
+        "name": "Small Warhead Calefaction Catalyst I",
+        "type": "rig"
+    }
+]

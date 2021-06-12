@@ -1,0 +1,188 @@
+from decimal import Decimal
+from django.db import models
+
+import najha.functional as f
+
+from modules import eveClient, eveStatic
+from modules.utils import *
+
+from base.models import *
+from EveAssets.models import *
+
+from .domain import market
+
+# Create your models here.
+'''
+class Config:
+    key = models.CharField(max_length=255, unique=True)
+    value = models.Text()
+    value_type = models.CharField(max_length=20, default='string'
+        choices = [
+            ('int', 'int'),
+            ('float', 'float'),
+            ('string', 'string'),
+            ('boolean', 'boolean'),
+        ]
+    )
+'''
+
+class Character(models.Model):
+    name = models.CharField(max_length=255, unique = True)
+    salesTax = models.FloatField()
+    brokersFee = models.FloatField()
+
+    def __str__(self):
+        return f'{self.name} (ST={self.salesTax:.3}, BF={self.brokersFee:.3})'
+
+
+# Inventory App
+class Inventory(models.Model):
+    owner = models.OneToOneField(Character, on_delete=models.CASCADE)
+
+
+class InventoryItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, related_name='items')
+
+    @property
+    def name(self):
+        return self.item.name
+
+
+# Industry:
+class TrackingListTemplate(models.Model):
+    owner = models.ForeignKey(Character, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, unique=True)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE)
+    orderCount = models.IntegerField()
+
+
+    def __str__(self):
+        return self.name
+
+    def addItem(self, name):
+        item = TrackedItemTemplate.objects.create(
+            item = Item.objects.get(name = name),
+            trackingListTemplate = self,
+        )
+
+    def generateEstimate(self):
+        trackingList = TrackingList.fromTemplate(self)
+
+        region = trackingList.station.solarSystem.region
+
+        # Obter preços dos materiais:
+        tranquility = eveClient.DataSource(eveClient.ServerNames.TRANQUILITY)
+        optionalParams = {}
+        items = self.items.all().order_by('item__name')
+        for item in items:
+            orders = tranquility.getMarketOrders(region.esiId, itemId = item.item.esiId, orderType = 'sell', **optionalParams)
+            orders = f.map(lambda o: {
+                'price': o['price'],
+                'volume_remain': o['volume_remain'],
+                }, orders
+            )
+            orders.sort(key = lambda o: o['price'])
+
+            topOrder, actualCount = market.findTopPriceOrder(orders, self.orderCount)
+            price = None
+            note = None
+            if topOrder is None:
+                note = 'No order found'
+            elif actualCount < self.orderCount:
+                note = f'Only {actualCount} orders found'
+                price = Decimal(topOrder['price'])
+            else:
+                price = Decimal(topOrder['price'])
+
+            trackingList.createItem(item, price, note)
+
+        return trackingList
+
+
+class TrackedItemTemplate(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    trackingListTemplate = models.ForeignKey(TrackingListTemplate, on_delete=models.CASCADE, related_name='items')
+
+    def __str__(self):
+        return self.item.name
+
+
+class TrackingList(Entity):
+    template = models.ForeignKey(TrackingListTemplate, null=True, on_delete=models.SET_NULL)
+    orderCount = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.template.name} ({self.id})'
+
+    @property
+    def owner(self):
+        return self.template.owner
+
+    @property
+    def station(self):
+        return self.template.station
+
+    @classmethod
+    def fromTemplate(cls, template):
+        return cls.objects.create(
+            template = template,
+            orderCount = template.orderCount,
+        )
+
+    def createItem(self, item, price, note):
+        return TrackedItem.objects.create(
+            item = item.item,
+            trackingList = self,
+            price = price,
+            note = note,
+        )
+
+
+class TrackedItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    trackingList = models.ForeignKey(TrackingList, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=30, decimal_places=2, null=True, blank=True)
+    note = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.item.name} {self.price:.2f} ISK'
+
+    @classmethod
+    def fromTemplate(cls, itemTemplate, price):
+        return cls.objects.create(
+            item = itemTemplate.item,
+            trackingList = itemTemplate.trackingList,
+            note = itemTemplate.note,
+            price = price,
+        )
+
+
+class NaiveIndustryEstimate(models.Model):
+    owner = models.ForeignKey(Character, on_delete=models.CASCADE)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE)
+
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    instalationCost = models.DecimalField(max_digits=30, decimal_places=2)
+    marketPrice = models.DecimalField(max_digits=30, decimal_places=2)
+    quantityInStock = models.IntegerField(default=0)
+    quantityProducing = models.IntegerField(default=0)
+    maxDailyProduction = models.IntegerField(default=0)
+
+    def calcProductionCost(self):
+        pass
+
+    def minSellPrice(self):
+        pass
+
+    def profit(self):
+        pass
+
+    def maxDailyProfitPerSlot(self):
+        pass
+
+
+# Market:
+class MarketPriceEstimator(models.Model):
+    name = models.CharField(max_length=255, unique=True)

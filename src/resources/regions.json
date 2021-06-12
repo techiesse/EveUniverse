@@ -1,0 +1,22 @@
+{
+    "The Forge": {
+        "id": 10000002,
+        "name": "The Forge"
+    },
+    "Domain": {
+        "id": 10000043,
+        "name": "Domain"
+    },
+    "Lonetrek": {
+        "id": 10000016,
+        "name": "Lonetrek"
+    },
+    "Black Rise": {
+        "id": 10000069,
+        "name": "Black Rise"
+    },
+    "The Citadel": {
+        "id": 10000033,
+        "name": "The Citadel"
+    }
+}
