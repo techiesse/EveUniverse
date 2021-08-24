@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block title %}Blueprints{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6 offset-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">Blueprint</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for blueprint in blueprints %}
+                <tr>
+                    <td class="">{{blueprint.name}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

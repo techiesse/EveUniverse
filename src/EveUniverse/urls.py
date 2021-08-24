@@ -20,6 +20,7 @@ from main.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('assets/', include('EveAssets.urls')),
     path('main/', include('main.urls')),
     path('', home),
 ]

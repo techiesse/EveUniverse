@@ -6,6 +6,7 @@ from .models import *
 admin.site.register(Region)
 admin.site.register(SolarSystem)
 admin.site.register(Station)
+admin.site.register(Item)
 admin.site.register(Blueprint)
 admin.site.register(BlueprintComponent)
 admin.site.register(BlueprintInstance)

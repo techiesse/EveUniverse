@@ -1,10 +1,12 @@
 from django.db import models
 
+from contextlib import suppress
+
 import json
 import math
 
 # Create your models here.
-
+from base.predicates import raises
 
 class ESI_Entity(models.Model):
     class Meta:
@@ -18,7 +20,6 @@ class ESI_Entity(models.Model):
 
 
 class Item(ESI_Entity):
-    blueprint = models.OneToOneField('Blueprint', null = True, on_delete=models.SET_NULL)
     type = models.CharField(max_length = 255,
         null = True, blank = True,
         choices=[
@@ -40,6 +41,9 @@ class Item(ESI_Entity):
                 esiId = item['id'],
                 type = item['type'],
             )
+
+    def hasBlueprint(self):
+        return not raises(Exception, lambda: self.blueprint)
 
 
 class Region(ESI_Entity):
@@ -87,8 +91,12 @@ class Station(ESI_Entity):
             )
 
 
+# For now I'm not dealing with research, copying and invention
 class Blueprint(ESI_Entity):
-    pass
+    item = models.OneToOneField(Item, on_delete=models.CASCADE)
+    runOutputCount = models.IntegerField(default = 1) # Number of items produced per run.
+    runCicleTime = models.IntegerField() # Seconds to complete 1 run.
+    maxProductionLimit = models.IntegerField()
 
 
 class BlueprintComponent(models.Model):
@@ -110,8 +118,8 @@ class BlueprintInstance(models.Model):
         ret = {'runCount': runCount}
         for item in blueprint.components.all():
             ret[item.id] = {
-                item: item,
-                quantity: math.floor(runCount * item.quantity * (1 + self.materialEfficiency / 100)),
+                'item': item,
+                'quantity': math.floor(runCount * item.quantity * (1 + self.materialEfficiency / 100)),
             }
         return ret
 
