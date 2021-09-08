@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect
 
-import multiprocessing as mp
 # Create your views here.
 
 from .forms import *
 from .models import *
 from modules.eveClient import *
-
-MAX_WORKERS = 10
 
 def home(request):
     return render(request, 'main/home.html')
@@ -51,26 +48,3 @@ def updateItemPrices(request, ownerId):
     trackingList.generateEstimate()
 
     return redirect('item_price_list', ownerId)
-
-
-def searchItem(request):
-    form = ItemSearchForm(request.POST or None)
-    foundItems = []
-    if form.is_valid():
-        tranquility = DataSource(ServerNames.TRANQUILITY)
-        itemName = form.cleaned_data['itemName']
-        queryResults, pageCount = tranquility.searchItem(itemName)
-        for category, itemIds in queryResults.items():
-            workerCount = min(math.ceil(len(itemIds) / 2), MAX_WORKERS)
-            #print(f'Using {workerCount} workers') #<<<<<
-            with mp.Pool(workerCount) as p:
-                foundItems.extend(p.map(tranquility.getItem, itemIds))
-
-    foundItems = list(map(lambda e: e[0], foundItems))
-
-    context = {
-        'form': form,
-        'results': foundItems,
-    }
-
-    return render(request, 'main/search.html', context)
