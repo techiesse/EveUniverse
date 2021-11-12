@@ -6,7 +6,7 @@
 {% block content %}
 <div class="row">
     <div class="col-2 offset-7">
-        <a class="btn btn-primary form-control" href="{% url 'blueprint_create' %}">Add Blueprint</a>
+        <a class="btn btn-primary form-control" href="{% url 'blueprint_search' %}">Add Blueprint</a>
     </div>
 </div>
 <div class="row">
@@ -19,12 +19,14 @@
             <thead>
                 <tr>
                     <th class="text-center">Blueprint</th>
+                    <th class="text-center">ID</th>
                 </tr>
             </thead>
             <tbody>
                 {% for blueprint in blueprints %}
                 <tr>
                     <td class="">{{blueprint.name}}</td>
+                    <td class="">{{blueprint.esiId}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

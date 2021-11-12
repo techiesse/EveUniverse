@@ -42,7 +42,7 @@ def searchBlueprint(request):
         'results': foundItems,
     }
 
-    return render(request, 'EveAssets/blueprint_create.html', context)
+    return render(request, 'EveAssets/blueprint_search.html', context)
 
 
 def handleBlueprintSearch(request):
