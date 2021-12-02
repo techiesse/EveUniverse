@@ -3,6 +3,14 @@
 {% block title %}Eve Universe{% endblock title %}
 
 {% block content %}
+<div>
+    <ul>
+        <li><a href="/admin"> Admin </a></li>
+        <li><a href="{% url 'input_materials_list' 1 %}"> Materiais </a></li>
+        <li><a href="{% url 'item_price_list' 1 %}"> Itens </a></li>
+    </ul>
+</div>
+
 <table>
     <thead>
         <tr>

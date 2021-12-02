@@ -20,6 +20,11 @@
         "type": "salvage"
     },
     {
+        "id": "25604",
+        "name": "Conductive Polymer",
+        "type": "salvage"
+    },
+    {
         "id": "25591",
         "name": "Contaminated Lorentz Fluid",
         "type": "salvage"
@@ -37,6 +42,11 @@
     {
         "id": "25601",
         "name": "Fried Interface Circuit",
+        "type": "salvage"
+    },
+    {
+        "id": "25603",
+        "name": "Melted Capacitor Console",
         "type": "salvage"
     },
     {
@@ -63,5 +73,30 @@
         "id": "25606",
         "name": "Ward Console",
         "type": "salvage"
+    },
+    {
+        "id": "2393",
+        "name": "Bacteria",
+        "type": "pi"
+    },
+    {
+        "id": "3683",
+        "name": "Oxygen",
+        "type": "pi"
+    },
+    {
+        "id": "2395",
+        "name": "Proteins",
+        "type": "pi"
+    },
+    {
+        "id": "3645",
+        "name": "Water",
+        "type": "pi"
+    },
+    {
+        "id": "57457",
+        "name": "Reinforced Carbon Fiber",
+        "type": "component"
     }
 ]

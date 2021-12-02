@@ -11,11 +11,14 @@ def home(request):
 
 
 def listInputMaterials(request, ownerId):
-    trackingLists = TrackingList.objects.filter(template__name='materials', template__owner__id=ownerId).order_by('-created_at')
+    trackingLists = TrackingListInstance.objects.filter(template__name='materials', template__owner__id=ownerId).order_by('-created_at')
     owner = Character.objects.get(id=ownerId)
 
-    trackingList = trackingLists[0]
-    items = trackingList.trackeditem_set.all()
+    items = []
+    if len(trackingLists) > 0:
+        trackingList = trackingLists[0]
+        items = trackingList.trackediteminstance_set.all()
+
     context = {
         'items': items,
         'owner': owner,
@@ -24,11 +27,14 @@ def listInputMaterials(request, ownerId):
 
 
 def listItemPrices(request, ownerId):
-    trackingLists = TrackingList.objects.filter(template__name='items', template__owner__id=ownerId).order_by('-created_at')
+    trackingLists = TrackingListInstance.objects.filter(template__name='items', template__owner__id=ownerId).order_by('-created_at')
     owner = Character.objects.get(id=ownerId)
 
-    trackingList = trackingLists[0]
-    items = trackingList.trackeditem_set.all()
+    items = []
+    if len(trackingLists) > 0:
+        trackingList = trackingLists[0]
+        items = trackingList.trackediteminstance_set.all()
+
     context = {
         'items': items,
         'owner': owner,
@@ -36,15 +42,15 @@ def listItemPrices(request, ownerId):
     return render(request, 'main/item-price.html', context)
 
 
-def updateInputMaterials(request, ownerId):
-    trackingList = TrackingListTemplate.objects.get(name='materials', owner__id=ownerId)
+def updateInputMaterialsPrices(request, ownerId):
+    trackingList = TrackingList.objects.get(name='materials', owner__id=ownerId)
     trackingList.generateEstimate()
 
     return redirect('input_materials_list', ownerId)
 
 
 def updateItemPrices(request, ownerId):
-    trackingList = TrackingListTemplate.objects.get(name='items', owner__id=ownerId)
+    trackingList = TrackingList.objects.get(name='items', owner__id=ownerId)
     trackingList.generateEstimate()
 
     return redirect('item_price_list', ownerId)

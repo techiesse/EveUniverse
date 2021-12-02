@@ -23,6 +23,7 @@ class Item(ESI_Entity):
     type = models.CharField(max_length = 255,
         null = True, blank = True,
         choices=[
+            ('component', 'Component'),
             ('mineral', 'Mineral'),
             ('module', 'Module'),
             ('rig', 'Rig'),

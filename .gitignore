@@ -1,0 +1,7 @@
+.vscode
+__pycache__
+node_modules
+resources
+/src/EveUniverse/settings.py
+/src/db.sqlite3
+*.zip

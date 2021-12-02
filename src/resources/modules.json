@@ -1,5 +1,10 @@
 [
     {
+        "id": 57478,
+        "name": "Auto-Integrity Preservation Seal",
+        "type": "module"
+    },
+    {
         "id": 12274,
         "name": "Ballistic Control System I",
         "type": "module"
@@ -10,9 +15,34 @@
         "type": "module"
     },
     {
+        "id": 57486,
+        "name": "Life Support Backup Unit",
+        "type": "module"
+    },
+    {
         "id": 9944,
         "name": "Magnetic Field Stabilizer I",
         "type": "module"
+    },
+    {
+        "id": 31360,
+        "name": "Medium Ancillary Current Router I",
+        "type": "rig"
+    },
+    {
+        "id": "31047",
+        "name": "Medium Auxiliary Nano Pump I",
+        "type": "rig"
+    },
+    {
+        "id": 31790,
+        "name": "Medium Core Defense Field Extender I",
+        "type": "rig"
+    },
+    {
+        "id": 31802,
+        "name": "Medium Core Defense Field Purger I",
+        "type": "rig"
     },
     {
         "id": 11563,
@@ -28,16 +58,6 @@
         "id": 33180,
         "name": "Scan Rangefinding Array I",
         "type": "module"
-    },
-    {
-        "id": 31790,
-        "name": "Medium Core Defense Field Extender I",
-        "type": "rig"
-    },
-    {
-        "id": 31802,
-        "name": "Medium Core Defense Field Purger I",
-        "type": "rig"
     },
     {
         "id": 31358,
@@ -57,6 +77,11 @@
     {
         "id": 31586,
         "name": "Small Bay Loading Accelerator I",
+        "type": "rig"
+    },
+    {
+        "id": 31370,
+        "name": "Small Capacitor Control Circuit I",
         "type": "rig"
     },
     {
@@ -115,8 +140,23 @@
         "type": "rig"
     },
     {
+        "id": 31083,
+        "name": "Small Salvage Tackle I",
+        "type": "rig"
+    },
+    {
+        "id": 31406,
+        "name": "Small Semiconductor Memory Cell I",
+        "type": "rig"
+    },
+    {
         "id": 33890,
         "name": "Small Transverse Bulkhead I",
+        "type": "rig"
+    },
+    {
+        "id": 30987,
+        "name": "Small Trimark Armor Pump I",
         "type": "rig"
     },
     {

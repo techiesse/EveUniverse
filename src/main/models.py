@@ -51,7 +51,7 @@ class InventoryItem(models.Model):
 
 
 # Industry:
-class TrackingListTemplate(models.Model):
+class TrackingList(models.Model):
     owner = models.ForeignKey(Character, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, unique=True)
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
@@ -62,13 +62,13 @@ class TrackingListTemplate(models.Model):
         return self.name
 
     def addItem(self, name):
-        item = TrackedItemTemplate.objects.create(
+        item = TrackedItem.objects.create(
             item = Item.objects.get(name = name),
             trackingListTemplate = self,
         )
 
     def generateEstimate(self):
-        trackingList = TrackingList.fromTemplate(self)
+        trackingList = TrackingListInstance.fromTemplate(self)
 
         region = trackingList.station.solarSystem.region
 
@@ -101,16 +101,16 @@ class TrackingListTemplate(models.Model):
         return trackingList
 
 
-class TrackedItemTemplate(models.Model):
+class TrackedItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    trackingListTemplate = models.ForeignKey(TrackingListTemplate, on_delete=models.CASCADE, related_name='items')
+    trackingListTemplate = models.ForeignKey(TrackingList, on_delete=models.CASCADE, related_name='items')
 
     def __str__(self):
         return self.item.name
 
 
-class TrackingList(Entity):
-    template = models.ForeignKey(TrackingListTemplate, null=True, on_delete=models.SET_NULL)
+class TrackingListInstance(Entity):
+    template = models.ForeignKey(TrackingList, null=True, on_delete=models.SET_NULL)
     orderCount = models.IntegerField()
 
     def __str__(self):
@@ -132,7 +132,7 @@ class TrackingList(Entity):
         )
 
     def createItem(self, item, price, note):
-        return TrackedItem.objects.create(
+        return TrackedItemInstance.objects.create(
             item = item.item,
             trackingList = self,
             price = price,
@@ -140,9 +140,9 @@ class TrackingList(Entity):
         )
 
 
-class TrackedItem(models.Model):
+class TrackedItemInstance(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    trackingList = models.ForeignKey(TrackingList, on_delete=models.CASCADE)
+    trackingList = models.ForeignKey(TrackingListInstance, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=30, decimal_places=2, null=True, blank=True)
     note = models.CharField(max_length=255, null=True, blank=True)
 
@@ -168,7 +168,11 @@ class NaiveIndustryEstimate(models.Model):
     marketPrice = models.DecimalField(max_digits=30, decimal_places=2)
     quantityInStock = models.IntegerField(default=0)
     quantityProducing = models.IntegerField(default=0)
-    maxDailyProduction = models.IntegerField(default=0)
+    estimatedDailyVolume = models.IntegerField()
+
+    @property
+    def name(self):
+        return self.item.name
 
     def calcProductionCost(self):
         pass
