@@ -46,8 +46,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    .link-list {
-    }
-</style>
