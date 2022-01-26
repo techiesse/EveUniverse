@@ -108,6 +108,9 @@ class Blueprint(ESI_Entity):
     runCicleTime = models.IntegerField() # Seconds to complete 1 run.
     maxProductionLimit = models.IntegerField()
 
+    def __str__(self):
+        return self.name
+
 
 class BlueprintComponent(models.Model):
     blueprint = models.ForeignKey(Blueprint, on_delete=models.CASCADE, related_name='components')
@@ -119,6 +122,9 @@ class BlueprintComponent(models.Model):
     @property
     def name(self):
         return self.item.name
+
+    def __str__(self):
+        return self.name
 
 
 class BlueprintInstance(models.Model):
@@ -132,9 +138,12 @@ class BlueprintInstance(models.Model):
         for item in self.blueprint.components.all():
             ret[item.id] = {
                 'item': item,
-                'quantity': math.floor(runCount * item.quantity * (1 + self.materialEfficiency / 100)),
+                'quantity': effectiveMaterialQuantity(item.quantity, self.materialEfficiency, runCount),
             }
         return ret
+
+    def __str__(self):
+        return f'{self.blueprint.name} ({self.me}/{self.te})'
 
     @property
     def me(self):
@@ -151,3 +160,7 @@ class BlueprintInstance(models.Model):
     @te.setter
     def te(self, value):
         self.timeEfficiency = value
+
+
+def effectiveMaterialQuantity(quantity, materialEfficiency, runCount):
+    return math.floor(runCount * quantity * (1 - materialEfficiency / 100))
