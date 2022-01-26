@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 
+from modules.eveClient import *
+
 from .forms import *
 from .models import *
-from modules.eveClient import *
+
 
 def home(request):
     return render(request, 'main/home.html')
