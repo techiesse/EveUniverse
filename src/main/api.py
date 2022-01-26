@@ -4,6 +4,7 @@ from django.forms import model_to_dict
 
 # Create your views here.
 
+import base.queryset as qs
 from base.decorators import apiRequest
 from modules.eveClient import *
 from support.http import jsonFailureResponse, jsonSuccessResponse
@@ -62,14 +63,29 @@ def updateIndustryItem(request, ownerId, itemId):
 
 @apiRequest
 def getTrackingList(request, ownerId, name):
-    trackingList = TrackingList.objects.get(name = name)
+    owner = Character.objects.get(id = ownerId)
+    trackingList = TrackingList.get(owner, name)
     lastInstance = trackingList.getLastInstance()
     return JsonResponse({
         'data': lastInstance.asdict
     })
 
+
 @apiRequest
 def listItems(request, ownerId):
     items = Item.objects.all()
+    return JsonResponse(qs.to_list(items), safe = False)
 
-    return JsonResponse(list(map(model_to_dict, items)), safe = False)
+
+@apiRequest
+def listInputMaterials(request, ownerId):
+    owner = Character.objects.get(id=ownerId)
+    trackingList = TrackingList.get(owner, 'materials').getLastInstance()
+    return JsonResponse(trackingList.items, safe = False)
+
+
+@apiRequest
+def listItemPrices(request, ownerId, itemType):
+    owner = Character.objects.get(id=ownerId)
+    trackingList = TrackingList.get(owner, itemType).getLastInstance()
+    return JsonResponse(trackingList.items, safe = False)

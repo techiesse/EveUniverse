@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Industry from '../views/Industry.vue'
 import ItemList from '../views/ItemList.vue'
+import IndustryItemPrices from '../views/IndustryItemPrices.vue'
 
 const routes = [
     {
@@ -27,6 +28,24 @@ const routes = [
         name: 'ItemList',
         component: ItemList
     },
+    {
+        path: '/industry/materials',
+        name: 'IndustryMaterials',
+        component: IndustryItemPrices,
+        props: {
+            listName: 'materials',
+            title: 'Materiais'
+        }
+    },
+    {
+        path: '/industry/modules',
+        name: 'IndustryModules',
+        component: IndustryItemPrices,
+        props: {
+            listName: 'items',
+            title: 'Módulos'
+        }
+    }
 ]
 
 const router = createRouter({
