@@ -46,6 +46,14 @@ class Item(ESI_Entity):
     def hasBlueprint(self):
         return not raises(Exception, lambda: self.blueprint)
 
+    @property
+    def asdict(self):
+        return {
+            'name': self.name,
+            'esiId': self.esiId,
+            'type': self.type,
+        }
+
 
 class Region(ESI_Entity):
     @classmethod
@@ -94,6 +102,7 @@ class Station(ESI_Entity):
 
 # For now I'm not dealing with research, copying and invention
 class Blueprint(ESI_Entity):
+    '''Base Blueprint. Not considering the effects of research or copy'''
     item = models.OneToOneField(Item, on_delete=models.CASCADE)
     runOutputCount = models.IntegerField(default = 1) # Number of items produced per run.
     runCicleTime = models.IntegerField() # Seconds to complete 1 run.
@@ -111,13 +120,14 @@ class BlueprintComponent(models.Model):
 
 
 class BlueprintInstance(models.Model):
+    '''A Blueprint suitable for production. Can potencially be researched'''
     blueprint = models.ForeignKey(Blueprint, on_delete=models.CASCADE)
     materialEfficiency = models.IntegerField(default=0)
     timeEfficiency = models.IntegerField(default=0)
 
     def calc_required_materials(self, runCount):
         ret = {'runCount': runCount}
-        for item in blueprint.components.all():
+        for item in self.blueprint.components.all():
             ret[item.id] = {
                 'item': item,
                 'quantity': math.floor(runCount * item.quantity * (1 + self.materialEfficiency / 100)),
