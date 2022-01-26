@@ -199,6 +199,7 @@ class IndustryMonitoringItem(models.Model):
 
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     instalationCost = models.DecimalField(max_digits=30, decimal_places=2)
+    transportationCost = models.DecimalField(max_digits=30, decimal_places=2, default=0)
     quantityInStock = models.IntegerField(default=0)
     quantityProducing = models.IntegerField(default=0)
     estimatedDailyVolume = models.IntegerField()
