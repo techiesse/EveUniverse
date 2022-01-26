@@ -50,13 +50,14 @@ class InventoryItem(models.Model):
         return self.item.name
 
 
-# Industry:
+# Market:
 class TrackingList(models.Model):
     owner = models.ForeignKey(Character, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
     orderCount = models.IntegerField()
 
+    unique_together = ['owner', 'name']
 
     def __str__(self):
         return self.name
@@ -64,13 +65,13 @@ class TrackingList(models.Model):
     def addItem(self, name):
         item = TrackedItem.objects.create(
             item = Item.objects.get(name = name),
-            trackingListTemplate = self,
+            trackingList = self,
         )
 
     def generateEstimate(self):
-        trackingList = TrackingListInstance.fromTemplate(self)
+        priceList = TrackingListInstance.fromTemplate(self)
 
-        region = trackingList.station.solarSystem.region
+        region = priceList.station.solarSystem.region
 
         # Obter preços dos materiais:
         tranquility = eveClient.DataSource(eveClient.ServerNames.TRANQUILITY)
@@ -90,20 +91,27 @@ class TrackingList(models.Model):
             note = None
             if topOrder is None:
                 note = 'No order found'
-            elif actualCount < self.orderCount:
-                note = f'Only {actualCount} orders found'
-                price = Decimal(topOrder['price'])
             else:
+                if actualCount < self.orderCount:
+                    note = f'Only {actualCount} orders found'
                 price = Decimal(topOrder['price'])
 
-            trackingList.createItem(item, price, note)
+            priceList.createItem(item, price, note)
 
-        return trackingList
+        return priceList
+
+
+    def getLastInstance(self):
+        return self.trackinglistinstance_set.latest('id')
+
+    @classmethod
+    def get(cls, owner, name):
+        return cls.objects.get(owner = owner, name = name)
 
 
 class TrackedItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    trackingListTemplate = models.ForeignKey(TrackingList, on_delete=models.CASCADE, related_name='items')
+    trackingList = models.ForeignKey(TrackingList, on_delete=models.CASCADE, related_name='items')
 
     def __str__(self):
         return self.item.name
@@ -139,6 +147,22 @@ class TrackingListInstance(Entity):
             note = note,
         )
 
+    @property
+    def items(self):
+        return list(map(lambda item: item.asdict, self.trackediteminstance_set.all()))
+
+    @property
+    def asdict(self):
+        return {
+            'name': self.template.name,
+            'orderCount': self.orderCount,
+            'items': self.items,
+        }
+
+    @classmethod
+    def ownedBy(cls, owner):
+        return cls.objects.filter(template__owner = owner)
+
 
 class TrackedItemInstance(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -158,14 +182,23 @@ class TrackedItemInstance(models.Model):
             price = price,
         )
 
+    @property
+    def asdict(self):
+        res = self.item.asdict
+        res.update({
+            'price': f'{self.price:.2f}',
+            'note': self.note,
+        })
+        return res
 
-class NaiveIndustryEstimate(models.Model):
+
+# Industry
+class IndustryMonitoringItem(models.Model):
     owner = models.ForeignKey(Character, on_delete=models.CASCADE)
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
 
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     instalationCost = models.DecimalField(max_digits=30, decimal_places=2)
-    marketPrice = models.DecimalField(max_digits=30, decimal_places=2)
     quantityInStock = models.IntegerField(default=0)
     quantityProducing = models.IntegerField(default=0)
     estimatedDailyVolume = models.IntegerField()
@@ -173,6 +206,10 @@ class NaiveIndustryEstimate(models.Model):
     @property
     def name(self):
         return self.item.name
+
+    @property
+    def type(self):
+        return self.item.type
 
     def calcProductionCost(self):
         pass
@@ -186,7 +223,17 @@ class NaiveIndustryEstimate(models.Model):
     def maxDailyProfitPerSlot(self):
         pass
 
-
-# Market:
-class MarketPriceEstimator(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    @property
+    def asdict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'type': self.type,
+            'station': self.station.id,
+            'item': self.item.asdict,
+            'instalationCost': float(self.instalationCost),
+            'productionCost': self.calcProductionCost(),
+            'quantityInStock': self.quantityInStock,
+            'quantityProducing': self.quantityProducing,
+            'estimatedDailyVolume': self.estimatedDailyVolume,
+        }
