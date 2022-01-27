@@ -8,7 +8,7 @@
 <script>
 
 import ItemPriceList from '@/components/ItemPriceList.vue'
-import {fetchJson} from '@/util'
+import {fetchJson} from '@/fetch'
 
 export default {
     name: 'IndustryItemPrices',

@@ -26,7 +26,7 @@
 
 <script>
 // @ is an alias to /src
-import {fetchJson} from "@/util.js"
+import {fetchJson} from "@/fetch.js"
 
 
 export default {

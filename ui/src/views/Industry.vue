@@ -7,7 +7,7 @@
 <script>
 // @ is an alias to /src
 import IndustryTable from '@/components/IndustryTable/IndustryTable.vue'
-import {fetchResource, fetchTrackingList} from "@/util.js"
+import {fetchResource, fetchTrackingList} from "@/fetch.js"
 
 
 export default {
