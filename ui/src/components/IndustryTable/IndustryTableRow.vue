@@ -1,18 +1,18 @@
 <template>
     <tr>
-        <td class="fmt-text">{{data.name}}</td>
-        <td class="fmt-text">{{data.type}}</td>
-        <td>{{data.materialsCost.toFixed(2)}}</td>
-        <td>{{data.instalationCost.toFixed(2)}}</td>
-        <td>{{data.productionCost.toFixed(2)}}</td>
-        <td>{{data.minSellPrice.toFixed(2)}}</td>
-        <td>{{data.marketPrice.toFixed(2)}}</td>
-        <td>{{data.profit.toFixed(2)}}</td>
-        <td>{{data.quantityInStock}}</td>
-        <td>{{data.maxDailyQuantityPerSlot}}</td>
-        <td>{{data.dailyProfitPerSlot.toFixed(2)}}</td>
-        <td>{{data.dailyBatchCost.toFixed(2)}}</td>
-        <td>{{data.profitOverCost.toFixed(2)}}</td>
+        <td class="no-wrap" style="width: 200px;">{{data.name}}</td>
+        <td>{{data.type}}</td>
+        <td class="fmt-number">{{data.materialsCost.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.instalationCost.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.productionCost.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.minSellPrice.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.marketPrice.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.profit.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.quantityInStock}}</td>
+        <td class="fmt-number">{{data.maxDailyQuantityPerSlot}}</td>
+        <td class="fmt-number">{{data.dailyProfitPerSlot.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.dailyBatchCost.toFixed(2)}}</td>
+        <td class="fmt-number">{{data.profitOverCost.toFixed(2)}}</td>
     </tr>
 </template>
 
@@ -34,10 +34,11 @@ export default {
         border-collapse: collapse;
         border-width: 2pt;
         border-color: silver;
-        text-align: right;
+        width: 10%;
     }
 
-    td.fmt-text{
-        text-align: left;
+    .no-wrap{
+        white-space: nowrap;
     }
+
 </style>

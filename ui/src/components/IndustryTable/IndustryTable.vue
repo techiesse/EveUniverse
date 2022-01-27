@@ -2,7 +2,7 @@
     <div>
         <AddItem :labels="header" />
         <button class="btn btn-secondary" @click="sort('dailyProfitPerSlot')">Sort</button>
-        <table class="table">
+        <table class="industry-table">
             <IndustryTableHeader :data="header" />
             <tbody>
                 <template v-for="item in tableData" :key="item.id">
@@ -18,7 +18,7 @@
 import IndustryTableHeader from '@/components/IndustryTable/IndustryTableHeader.vue'
 import IndustryTableRow from '@/components/IndustryTable/IndustryTableRow.vue'
 import AddItem from '@/components/IndustryTable/AddItem.vue'
-import {fetchResource, fetchTrackingList} from "@/util.js"
+import {fetchResource, fetchTrackingList} from "@/fetch.js"
 
 
 const HEADER = {
@@ -31,10 +31,10 @@ const HEADER = {
     marketPrice: 'Valor Atual em Jita',
     profit: 'Lucro Atual',
     quantityInStock: 'Estoque Atual',
-    maxDailyQuantityPerSlot: 'Qtd/dia/slot',
-    dailyProfitPerSlot: 'Lucro/dia/slot',
+    maxDailyQuantityPerSlot: 'Qtd / dia / slot',
+    dailyProfitPerSlot: 'Lucro / dia  /slot',
     dailyBatchCost: 'Custo Lote (1 dia)',
-    profitOverCost: 'Lucro/Custo',
+    profitOverCost: 'Lucro / Custo',
 }
 
 export default {
@@ -129,13 +129,27 @@ export default {
 
 
 <style scoped>
-    table, th, td{
+    table.industry-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    table, th, td {
+        font-size: 10pt;
         border-style: solid;
         border-collapse: collapse;
         border-width: 2pt;
         border-color: silver;
     }
-    td {
-      text-align: left;
+
+    td.fmt-number{
+        text-align: right;
     }
+
+    td.fmt-text{
+        text-align: left;
+    }
+
+
+
 </style>

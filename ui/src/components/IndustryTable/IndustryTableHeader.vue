@@ -1,7 +1,7 @@
 <template>
     <thead>
         <tr class="align-top">
-            <th>{{data.name}}</th>
+            <th class="bla">{{data.name}}</th>
             <th>{{data.type}}</th>
             <th>{{data.materialsCost}}</th>
             <th>{{data.instalationCost}}</th>
@@ -36,5 +36,9 @@ export default {
         border-collapse: collapse;
         border-width: 2pt;
         border-color: silver;
+    }
+
+    .bla{
+        width: 200px;
     }
 </style>
