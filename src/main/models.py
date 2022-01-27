@@ -57,7 +57,7 @@ class TrackingList(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
     orderCount = models.IntegerField()
 
-    unique_together = ['owner', 'name']
+    models.UniqueConstraint(fields = ['owner', 'name'], name='unique_tracking_list')
 
     def __str__(self):
         return self.name
@@ -196,6 +196,8 @@ class TrackedItemInstance(models.Model):
 class IndustryMonitoringItem(models.Model):
     owner = models.ForeignKey(Character, on_delete=models.CASCADE)
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
+
+    models.UniqueConstraint(fields = ['owner', 'station'], name='unique_monitoring_item')
 
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     instalationCost = models.DecimalField(max_digits=30, decimal_places=2)

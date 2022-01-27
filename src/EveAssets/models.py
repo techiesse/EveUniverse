@@ -117,7 +117,7 @@ class BlueprintComponent(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
-    unique_together = ['blueprint', 'item']
+    models.UniqueConstraint(fields = ['blueprint', 'item'], name='unique_blueprint_component')
 
     @property
     def name(self):
