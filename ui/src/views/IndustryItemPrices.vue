@@ -18,7 +18,7 @@ export default {
     },
 
     props: {
-        //'list-name': String, // Desse jeito não está sendo possível passar no router
+        //'list-name': String, // Vue router does not recognize this syntax
         listName: String,
         title: String
     },
