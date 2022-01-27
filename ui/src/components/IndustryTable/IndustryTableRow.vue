@@ -54,6 +54,7 @@ export default {
 
     .no-wrap{
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
 </style>
