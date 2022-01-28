@@ -5,7 +5,7 @@
         <table class="industry-table">
             <IndustryTableHeader :data="header" />
             <tbody>
-                <template v-for="item in tableData" :key="item.id">
+                <template v-for="item in data" :key="item.id">
                     <IndustryTableRow :data="item" />
                 </template>
             </tbody>
@@ -65,14 +65,6 @@ export default {
     async created() {
 
     },
-
-    computed: {
-        tableData() {
-            return this.data
-        }
-    }
-
-
 }
 
 </script>
@@ -99,7 +91,5 @@ export default {
     td.fmt-text{
         text-align: left;
     }
-
-
 
 </style>
