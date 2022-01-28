@@ -7,7 +7,7 @@
 <script>
 // @ is an alias to /src
 import IndustryTable from '@/components/IndustryTable/IndustryTable.vue'
-import {fetchResource, fetchTrackingList} from "@/fetch.js"
+import {fetchJson} from "@/fetch.js"
 
 
 export default {
@@ -24,7 +24,7 @@ export default {
     },
 
     async created(){
-        this.prices = await fetchResource('http://localhost:8000/main/api/industry/monitoring/1/')
+        this.prices = await fetchJson('http://localhost:8000/main/api/industry/monitoring/1/')
     }
 }
 </script>

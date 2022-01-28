@@ -33,7 +33,6 @@ export default {
         const itemType = this.$props.listName
         const url = `http://localhost:8000/main/api/item-prices/1/${itemType}`
         this.items = await fetchJson(url)
-        console.log(this.items)
     }
 }
 </script>

@@ -30,6 +30,9 @@ export default {
         fmtMoney: money
     },
 
+    created(){
+    }
+
 /*
     mounted(){
         const elems = document.getElementsByClassName('fmt-number')

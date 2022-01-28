@@ -15,12 +15,33 @@ from .models import *
 
 @apiRequest
 def industryTable(request, ownerId):
+    owner = Character.objects.get(id=ownerId)
     items = IndustryMonitoringItem.objects.filter(owner__id = ownerId)
-    res = {
-        'data': list(map(lambda item: item.asdict, items))
-    }
 
-    return JsonResponse(res)
+    materialPrices = TrackingList.get(owner, 'materials').getLastInstance().items_dict
+    modulePrices = TrackingList.get(owner, 'items').getLastInstance().items_dict
+
+    res = []
+    for item in items:
+        newItem = {}
+        newItem['id'] = item.item.id
+        newItem['name'] = item.item.name
+        newItem['type'] = item.item.type
+        newItem['materialsCost'] = 0 # Calcular o custo dos materiais requeridos com base em "materialPrices"
+        newItem['instalationCost'] = item.instalationCost
+        newItem['productionCost'] = 0 # Calcular a partir dos valores dos materiais usando as Blueprints
+        newItem['minSellPrice'] = 0 # productionCost + taxes
+        newItem['marketPrice'] = modulePrices[item.item.esiId]['price']
+        newItem['profit'] = newItem['marketPrice'] - newItem['productionCost'] # - taxes
+        newItem['quantityInStock'] = item.quantityInStock
+        newItem['maxDailyQuantityPerSlot'] = 0 # (pegar da blueprint e calcular o percentual)
+        newItem['dailyProfitPerSlot'] = 0
+        newItem['dailyBatchCost'] = 0
+        newItem['profitOverCost'] = 0 # profit / productionCost
+
+        res.append(newItem)
+
+    return JsonResponse(res, safe = False)
 
 
 @apiRequest
@@ -48,7 +69,7 @@ def createIndustryItem(request, ownerId, stationESIId):
 
     return jsonSuccessResponse({'message': 'created'})
 
-
+'''
 @apiRequest
 def updateIndustryItem(request, ownerId, itemId):
     item = IndustryMonitoringItem.objects.get(owner__id = ownerId, id = itemId)
@@ -59,7 +80,7 @@ def updateIndustryItem(request, ownerId, itemId):
     }
 
     return JsonResponse(res)
-
+'''
 
 @apiRequest
 def getTrackingList(request, ownerId, name):

@@ -152,6 +152,10 @@ class TrackingListInstance(Entity):
         return list(map(lambda item: item.asdict, self.trackediteminstance_set.all()))
 
     @property
+    def items_dict(self):
+        return {item.item.esiId: item.asdict for item in self.trackediteminstance_set.all()}
+
+    @property
     def asdict(self):
         return {
             'name': self.template.name,
@@ -186,7 +190,7 @@ class TrackedItemInstance(models.Model):
     def asdict(self):
         res = self.item.asdict
         res.update({
-            'price': f'{self.price:.2f}',
+            'price': self.price,
             'note': self.note,
         })
         return res

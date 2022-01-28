@@ -18,7 +18,6 @@
 import IndustryTableHeader from '@/components/IndustryTable/IndustryTableHeader.vue'
 import IndustryTableRow from '@/components/IndustryTable/IndustryTableRow.vue'
 import AddItem from '@/components/IndustryTable/AddItem.vue'
-import {fetchResource, fetchTrackingList} from "@/fetch.js"
 
 
 const HEADER = {
@@ -52,77 +51,28 @@ export default {
 
     data() {
         return {
-            materialPrices: {},
-            modulePrices: {},
-            tableData: [],
             header: HEADER,
+            tableData: []
         }
     },
 
     methods: {
         sort(key) {
-            console.log("Funciona !!!", key); //<<<<<
             this.tableData.sort((a, b) => a[key] < b[key] ? -1 : 1)
         }
     },
 
     async created() {
-        try {
-            const modules = await fetchTrackingList('items')
-            for (const m of modules.items)
-            {
-                this.modulePrices[m.esiId] = m
-            }
-        }
-        catch(err){
-            console.log(err); //<<<<<
-        }
 
-        try{
-            const materials = await fetchTrackingList('materials')
-            for (const m of materials.items)
-            {
-                this.materialPrices[m.esiId] = m
-            }
-        }
-        catch(err){
-            console.log(err); //<<<<<
-        }
+    },
 
-
-        for (let i = 0; i < this.data.length; ++i)
-        {
-            const item = this.data[i]
-
-            const materialsCost = 0 // Calcular o custo dos materiais requeridos com base em "materialPrices"
-            const instalationCost = item.instalationCost
-            const productionCost = 0 // Calcular a partir dos valores dos materiais usando as Blueprints
-            const minSellPrice = 0 // productionCost + taxes
-            const marketPrice = parseFloat(this.modulePrices[item.item.esiId].price)
-            const profit = marketPrice - productionCost // - taxes
-            const quantityInStock = item.quantityInStock
-            const maxDailyQuantityPerSlot = 0 // (pegar da blueprint e calcular o percentual)
-            const dailyProfitPerSlot = 0
-            const dailyBatchCost = 0
-            const profitOverCost = 0 // profit / productionCost
-
-            this.tableData[i] = {
-                name: item.item.name,
-                type: item.item.type,
-                materialsCost,
-                instalationCost,
-                productionCost,
-                minSellPrice,
-                marketPrice,
-                profit,
-                quantityInStock,
-                maxDailyQuantityPerSlot,
-                dailyProfitPerSlot,
-                dailyBatchCost,
-                profitOverCost,
-            }
+    computed: {
+        tableData() {
+            return this.data
         }
     }
+
+
 }
 
 </script>
