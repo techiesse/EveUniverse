@@ -185,6 +185,5 @@ class BlueprintInstance(models.Model):
         return math.floor(self.blueprint.runOutputCount * (24 * 3600) / self.fixTime(self.blueprint.runCicleTime))
 
 
-
 def effectiveMaterialQuantity(quantity, materialEfficiency, runCount):
-    return math.floor(runCount * quantity * (1 - materialEfficiency / 100))
+    return math.ceil(runCount * quantity * (1 - materialEfficiency / 100))
