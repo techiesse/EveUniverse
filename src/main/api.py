@@ -21,23 +21,26 @@ def industryTable(request, ownerId):
     materialPrices = TrackingList.get(owner, 'materials').getLastInstance().items_dict
     modulePrices = TrackingList.get(owner, 'items').getLastInstance().items_dict
 
+
     res = []
     for item in items:
+        bpi = item.blueprint
+
         newItem = {}
-        newItem['id'] = item.item.id
-        newItem['name'] = item.item.name
-        newItem['type'] = item.item.type
+        newItem['id'] = bpi.blueprint.item.id
+        newItem['name'] = bpi.blueprint.item.name
+        newItem['type'] = bpi.blueprint.item.type
         newItem['materialsCost'] = 0 # Calcular o custo dos materiais requeridos com base em "materialPrices"
-        newItem['instalationCost'] = item.instalationCost
-        newItem['productionCost'] = 0 # Calcular a partir dos valores dos materiais usando as Blueprints
+        newItem['instalationCost'] = float(item.instalationCost)
+        newItem['productionCost'] = newItem['materialsCost'] * (1 + owner.brokersFee) + float(item.instalationCost + item.transportationCost)
         newItem['minSellPrice'] = 0 # productionCost + taxes
-        newItem['marketPrice'] = modulePrices[item.item.esiId]['price']
+        newItem['marketPrice'] = float(modulePrices[bpi.blueprint.item.esiId]['price'])
         newItem['profit'] = newItem['marketPrice'] - newItem['productionCost'] # - taxes
         newItem['quantityInStock'] = item.quantityInStock
         newItem['maxDailyQuantityPerSlot'] = 0 # (pegar da blueprint e calcular o percentual)
         newItem['dailyProfitPerSlot'] = 0
-        newItem['dailyBatchCost'] = 0
-        newItem['profitOverCost'] = 0 # profit / productionCost
+        newItem['dailyBatchCost'] = newItem['productionCost'] * bpi.maxItemsPerDay()
+        newItem['profitOverCost'] = newItem['profit'] / newItem['productionCost']
 
         res.append(newItem)
 

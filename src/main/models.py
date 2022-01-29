@@ -203,7 +203,7 @@ class IndustryMonitoringItem(models.Model):
 
     models.UniqueConstraint(fields = ['owner', 'station'], name='unique_monitoring_item')
 
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    blueprint = models.ForeignKey(BlueprintInstance, on_delete=models.CASCADE)
     instalationCost = models.DecimalField(max_digits=30, decimal_places=2)
     transportationCost = models.DecimalField(max_digits=30, decimal_places=2, default=0)
     quantityInStock = models.IntegerField(default=0)

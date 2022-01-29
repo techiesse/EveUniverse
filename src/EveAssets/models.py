@@ -6,6 +6,8 @@ import json
 import math
 
 # Create your models here.
+import base.queryset as qs
+
 from base.predicates import raises
 
 class ESI_Entity(models.Model):
@@ -111,6 +113,13 @@ class Blueprint(ESI_Entity):
     def __str__(self):
         return self.name
 
+    def filterComponents(self, *q, **query):
+        return self.blueprintcomponent_set.filter(*q, **query)
+
+    @property
+    def components(self):
+        return qs.tolist(self.filterComponents)
+
 
 class BlueprintComponent(models.Model):
     blueprint = models.ForeignKey(Blueprint, on_delete=models.CASCADE, related_name='components')
@@ -143,23 +152,38 @@ class BlueprintInstance(models.Model):
         return ret
 
     def __str__(self):
-        return f'{self.blueprint.name} ({self.me}/{self.te})'
+        return f'{self.blueprint.name} ({self.materialEfficiency}/{self.timeEfficiency})'
 
     @property
     def me(self):
-        return self.materialEfficiency
+        return self.materialEfficiency / 100
 
     @me.setter
     def me(self, value):
-        self.materialEfficiency = value
+        self.materialEfficiency = round(value * 100)
 
     @property
     def te(self):
-        return self.timeEfficiency
+        return self.timeEfficiency / 100
 
     @te.setter
     def te(self, value):
-        self.timeEfficiency = value
+        self.timeEfficiency = round(value * 100)
+
+    @property
+    def producedItem(self):
+        return self.blueprint.item
+
+    @property
+    def components(self):
+        return self.blueprint.components
+
+    def fixTime(self, time):
+        return time * (1 - self.te)
+
+    def maxItemsPerDay(self):
+        return math.floor(self.blueprint.runOutputCount * (24 * 3600) / self.fixTime(self.blueprint.runCicleTime))
+
 
 
 def effectiveMaterialQuantity(quantity, materialEfficiency, runCount):
