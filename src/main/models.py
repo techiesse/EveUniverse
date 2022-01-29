@@ -1,3 +1,4 @@
+from contextlib import suppress
 from decimal import Decimal
 from django.db import models
 
@@ -102,7 +103,11 @@ class TrackingList(models.Model):
 
 
     def getLastInstance(self):
-        return self.trackinglistinstance_set.latest('id')
+        instance = None
+        with suppress(TrackingListInstance.DoesNotExist):
+            instance = self.trackinglistinstance_set.latest('id')
+
+        return instance
 
     @classmethod
     def get(cls, owner, name):

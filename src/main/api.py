@@ -18,9 +18,16 @@ def industryTable(request, ownerId):
     owner = Character.objects.get(id=ownerId)
     items = IndustryMonitoringItem.objects.filter(owner__id = ownerId)
 
-    materialPrices = TrackingList.get(owner, 'materials').getLastInstance().items_dict
-    modulePrices = TrackingList.get(owner, 'items').getLastInstance().items_dict
+    materialPriceList = TrackingList.get(owner, 'materials').getLastInstance()
+    if materialPriceList is None:
+        return jsonFailureResponse('Material price list is empty. Did you forget to update the list?')
 
+    modulePriceList = TrackingList.get(owner, 'items').getLastInstance()
+    if modulePriceList is None:
+        return jsonFailureResponse('Module price list is empty. Did you forget to update the list?')
+
+    materialPrices = materialPriceList.items_dict
+    modulePrices = modulePriceList.items_dict
 
     res = []
     for item in items:
@@ -91,7 +98,7 @@ def getTrackingList(request, ownerId, name):
     trackingList = TrackingList.get(owner, name)
     lastInstance = trackingList.getLastInstance()
     return JsonResponse({
-        'data': lastInstance.asdict
+        'data': lastInstance.asdict if lastInstance is not None else {}
     })
 
 
@@ -103,13 +110,12 @@ def listItems(request, ownerId):
 
 @apiRequest
 def listInputMaterials(request, ownerId):
-    owner = Character.objects.get(id=ownerId)
-    trackingList = TrackingList.get(owner, 'materials').getLastInstance()
-    return JsonResponse(trackingList.items, safe = False)
+    return listItemPrices(request, ownerId, 'materials')
 
 
 @apiRequest
 def listItemPrices(request, ownerId, itemType):
     owner = Character.objects.get(id=ownerId)
     trackingList = TrackingList.get(owner, itemType).getLastInstance()
-    return JsonResponse(trackingList.items, safe = False)
+    items = trackingList.items if trackingList is not None else []
+    return JsonResponse(items, safe = False)
