@@ -8,10 +8,11 @@ export function money(value)
     {
         sValue = value.toFixed(2)
     }
-    let [ipart, dpart] = sValue.split('.')
+    const [_, sign, absValue] = sValue.match(/(-?)(.+)/)
+    let [ipart, dpart] = absValue.split('.')
     dpart = dpart || "00"
     const parts = splitSL(ipart, 3)
-    const p1 = parts.join('.')
+    const p1 = sign + parts.join('.')
     const ret = [p1, dpart].join(',')
     return ret
 }
