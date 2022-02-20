@@ -147,7 +147,7 @@ class BlueprintInstance(models.Model):
         for item in self.blueprint.components.all():
             ret[item.id] = {
                 'item': item,
-                'quantity': effectiveMaterialQuantity(item.quantity, self.materialEfficiency, runCount),
+                'quantity': effectiveMaterialQuantity(item.quantity, self.me, runCount),
             }
         return ret
 
@@ -186,4 +186,4 @@ class BlueprintInstance(models.Model):
 
 
 def effectiveMaterialQuantity(quantity, materialEfficiency, runCount):
-    return math.ceil(runCount * quantity * (1 - materialEfficiency / 100))
+    return math.ceil(runCount * quantity * (1 - materialEfficiency))

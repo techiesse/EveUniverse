@@ -119,3 +119,12 @@ def listItemPrices(request, ownerId, itemType):
     trackingList = TrackingList.get(owner, itemType).getLastInstance()
     items = trackingList.items if trackingList is not None else []
     return JsonResponse(items, safe = False)
+
+
+@apiRequest
+def updateItemPrices(request, ownerId, itemType):
+    owner = Character.objects.get(id=ownerId)
+    trackingList = TrackingList.get(owner, itemType)
+    trackingList.generateEstimate()
+
+    return JsonResponse({'success': True})
