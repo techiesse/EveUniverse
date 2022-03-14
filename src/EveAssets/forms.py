@@ -16,6 +16,6 @@ class BlueprintForm(forms.ModelForm):
         fields = [
             'item',
             'runOutputCount',
-            'runCicleTime',
+            'runCycleTime',
             'maxProductionLimit',
         ]

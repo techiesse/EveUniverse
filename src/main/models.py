@@ -1,5 +1,7 @@
 from contextlib import suppress
 from decimal import Decimal
+
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 import najha.functional as f
@@ -34,6 +36,31 @@ class Character(models.Model):
 
     def __str__(self):
         return f'{self.name} (ST={self.salesTax:.3}, BF={self.brokersFee:.3})'
+
+
+class Skill(models.Model):
+    name = models.CharField(max_length=255, unique = True)
+
+    def __str__(self):
+        return f'Skill: {self.name}'
+
+
+class CharacterSkill(models.Model):
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+
+    models.UniqueConstraint(fields=['skill', 'character'], name='unique_character_skill')
+
+    level = models.IntegerField(
+        default=0,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(5),
+        ]
+    )
+
+    def __str__(self):
+        return f'{self.skill} - Level {self.level}'
 
 
 # Inventory App
@@ -223,8 +250,15 @@ class IndustryMonitoringItem(models.Model):
     def type(self):
         return self.item.type
 
-    def calcProductionCost(self):
-        pass
+    def calcMaterialsCost(self, materialPrices):
+        materials100 = self.blueprint.calcRequiredMaterials(100)
+        cost100 = 0
+        for id, component in materials100.items():
+            if id == 'runCount':
+                continue
+            cost100 += float(materialPrices[component['item'].item.esiId]['price']) * component['quantity']
+        cost = cost100 / 100
+        return cost
 
     def minSellPrice(self):
         pass
