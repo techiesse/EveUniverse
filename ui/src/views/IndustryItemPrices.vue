@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <h1>{{title}}</h1>
+        <button class="btn btn-primary" @click="updateButtonClick()">Atualizar</button>
+        <h2 style="display: none;" class="loading">Loading ...</h2>
         <ItemPriceList :items="items"></ItemPriceList>
+        <h2 style="display: none;" class="loading">Loading ...</h2>
         <button class="btn btn-primary" @click="updateButtonClick()">Atualizar</button>
     </div>
 </template>
@@ -10,6 +13,8 @@
 
 import ItemPriceList from '@/components/ItemPriceList.vue'
 import {fetchJson} from '@/fetch'
+
+const loadingMessages = document.getElementsByClassName("loading")
 
 export default {
     name: 'IndustryItemPrices',
@@ -52,8 +57,16 @@ export default {
         },
 
         async updateButtonClick() {
+            for (let item of loadingMessages){
+                item.style.display = "block"
+            }
+
             await this.updateList()
             this.items = await this.fetchData()
+
+            for (let item of loadingMessages){
+                item.style.display = "none"
+            }
         }
     }
 }

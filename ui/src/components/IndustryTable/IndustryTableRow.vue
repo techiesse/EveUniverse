@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <td class="no-wrap" style="width: 200px;">{{data.name}}</td>
+        <td class="no-wrap" style="width: 300px;">{{data.name}}</td>
         <td>{{data.type}}</td>
         <td class="fmt-number">{{fmtMoney(data.materialsCost)}}</td>
         <td class="fmt-number">{{fmtMoney(data.instalationCost)}}</td>
@@ -57,7 +57,7 @@ export default {
 
     .no-wrap{
         white-space: nowrap;
-        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
 </style>
