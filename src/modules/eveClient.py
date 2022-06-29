@@ -67,7 +67,7 @@ class DataSource:
         return self.search(itemName, ['inventory_type'], strict=strict)
 
 
-    def getMarketOrders(self, regionId, solarSystemId = None, itemId = None, orderType = 'all'):
+    def getRegionMarketOrders(self, regionId, solarSystemId = None, itemId = None, orderType = 'all'):
         path = f'latest/markets/{regionId}/orders'
 
         params = {

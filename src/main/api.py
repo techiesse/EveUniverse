@@ -1,4 +1,3 @@
-import imp
 from django.http.response import JsonResponse
 from django.forms import model_to_dict
 
@@ -11,6 +10,16 @@ from support.http import jsonFailureResponse, jsonSuccessResponse
 
 from .forms import *
 from .models import *
+
+from .marketService import calcMinSellPrice, calcProfit
+from .industryService import calcProductionCost
+
+
+def calcMaxItemsPerDay(bpi, owner):
+    industryLevel = owner.characterskill_set.get(skill__name = 'Industry').level
+    advancedIndustryLevel = owner.characterskill_set.get(skill__name = 'Advanced Industry').level
+
+    return bpi.maxItemsPerDay(industryLevel, advancedIndustryLevel)
 
 
 @apiRequest
@@ -26,8 +35,8 @@ def industryTable(request, ownerId):
     if modulePriceList is None:
         return jsonFailureResponse('Module price list is empty. Did you forget to update the list?')
 
-    materialPrices = materialPriceList.items_dict
-    modulePrices = modulePriceList.items_dict
+    materialPrices = materialPriceList.itemsDict
+    modulePrices = modulePriceList.itemsDict
 
     res = []
     for item in items:
@@ -37,16 +46,16 @@ def industryTable(request, ownerId):
         newItem['id'] = bpi.blueprint.item.id
         newItem['name'] = bpi.blueprint.item.name
         newItem['type'] = bpi.blueprint.item.type
-        newItem['materialsCost'] = 0 # Calcular o custo dos materiais requeridos com base em "materialPrices"
-        newItem['instalationCost'] = float(item.instalationCost)
-        newItem['productionCost'] = newItem['materialsCost'] * (1 + owner.brokersFee) + float(item.instalationCost + item.transportationCost)
-        newItem['minSellPrice'] = 0 # productionCost + taxes
+        newItem['materialsCost'] = item.calcMaterialsCost(materialPrices) # Calcular o custo dos materiais requeridos com base em "materialPrices"
+        newItem['instalationCost'] = item.unitInstalationCost
+        newItem['productionCost'] = calcProductionCost(newItem['materialsCost'], item.unitInstalationCost, item.transportationCost)
+        newItem['minSellPrice'] = calcMinSellPrice(newItem['productionCost'], owner.salesTax, owner.brokersFee)
         newItem['marketPrice'] = float(modulePrices[bpi.blueprint.item.esiId]['price'])
-        newItem['profit'] = newItem['marketPrice'] - newItem['productionCost'] # - taxes
+        newItem['profit'] = calcProfit(newItem['marketPrice'], newItem['productionCost'], owner.salesTax, owner.brokersFee)
         newItem['quantityInStock'] = item.quantityInStock
-        newItem['maxDailyQuantityPerSlot'] = 0 # (pegar da blueprint e calcular o percentual)
+        newItem['maxDailyQuantityPerSlot'] = calcMaxItemsPerDay(bpi, owner)
         newItem['dailyProfitPerSlot'] = 0
-        newItem['dailyBatchCost'] = newItem['productionCost'] * bpi.maxItemsPerDay()
+        newItem['dailyBatchCost'] = newItem['productionCost'] * newItem['maxDailyQuantityPerSlot']
         newItem['profitOverCost'] = newItem['profit'] / newItem['productionCost']
 
         res.append(newItem)
