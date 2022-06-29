@@ -11,7 +11,7 @@
             <th>{{data.profit}}</th>
             <th>{{data.quantityInStock}}</th>
             <th>{{data.maxDailyQuantityPerSlot}}</th>
-            <th>{{data.dailyProfitPerSlot}}</th>
+            <th>{{data.potentialDailyProfit}}</th>
             <th>{{data.dailyBatchCost}}</th>
             <th>{{data.profitOverCost}}</th>
         </tr>

@@ -54,7 +54,8 @@ def industryTable(request, ownerId):
         newItem['profit'] = calcProfit(newItem['marketPrice'], newItem['productionCost'], owner.salesTax, owner.brokersFee)
         newItem['quantityInStock'] = item.quantityInStock
         newItem['maxDailyQuantityPerSlot'] = calcMaxItemsPerDay(bpi, owner)
-        newItem['dailyProfitPerSlot'] = 0
+        #newItem['dailyProfitPerSlot'] = 0
+        newItem['potentialDailyProfit'] = newItem['profit'] * item.estimatedDailyVolume / 10
         newItem['dailyBatchCost'] = newItem['productionCost'] * newItem['maxDailyQuantityPerSlot']
         newItem['profitOverCost'] = newItem['profit'] / newItem['productionCost']
 

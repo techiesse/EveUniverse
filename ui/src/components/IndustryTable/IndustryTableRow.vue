@@ -10,7 +10,7 @@
         <td class="fmt-number">{{fmtMoney(data.profit)}}</td>
         <td class="fmt-number">{{data.quantityInStock}}</td>
         <td class="fmt-number">{{data.maxDailyQuantityPerSlot}}</td>
-        <td class="fmt-number">{{fmtMoney(data.dailyProfitPerSlot)}}</td>
+        <td class="fmt-number">{{fmtMoney(data.potentialDailyProfit)}}</td>
         <td class="fmt-number">{{fmtMoney(data.dailyBatchCost)}}</td>
         <td class="fmt-number">{{fmtMoney(data.profitOverCost)}}</td>
     </tr>

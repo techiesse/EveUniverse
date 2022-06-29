@@ -31,7 +31,7 @@ const HEADER = {
     profit: 'Lucro Atual',
     quantityInStock: 'Estoque Atual',
     maxDailyQuantityPerSlot: 'Qtd / dia / slot',
-    dailyProfitPerSlot: 'Lucro / dia  /slot',
+    potentialDailyProfit: 'Lucro max estimado por dia',
     dailyBatchCost: 'Custo Lote (1 dia)',
     profitOverCost: 'Lucro / Custo',
 }
